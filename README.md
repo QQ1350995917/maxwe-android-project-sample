@@ -1,0 +1,1 @@
+# maxwe-android-project-sample
