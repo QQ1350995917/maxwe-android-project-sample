@@ -2,8 +2,9 @@
 <project version="4">
   <component name="ProjectModuleManager">
     <modules>
-      <module fileurl="file://$PROJECT_DIR$/app/app.iml" filepath="$PROJECT_DIR$/app/app.iml" />
+      <module fileurl="file://$PROJECT_DIR$/maxwe-android-dao-generator/maxwe-android-dao-generator.iml" filepath="$PROJECT_DIR$/maxwe-android-dao-generator/maxwe-android-dao-generator.iml" />
       <module fileurl="file://$PROJECT_DIR$/maxwe-android-project-sample.iml" filepath="$PROJECT_DIR$/maxwe-android-project-sample.iml" />
+      <module fileurl="file://$PROJECT_DIR$/maxwe-android-sample/maxwe-android-sample.iml" filepath="$PROJECT_DIR$/maxwe-android-sample/maxwe-android-sample.iml" />
     </modules>
   </component>
 </project>

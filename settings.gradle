@@ -1,1 +1,2 @@
-include ':app'
+include ':maxwe-android-sample', ':maxwe-android-dao-generator'
+
