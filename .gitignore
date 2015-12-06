@@ -6,3 +6,10 @@
 .DS_Store
 /build
 /captures
+
+build/
+.idea/
+*.ipr
+*.iws
+*.iml
+*.apk
