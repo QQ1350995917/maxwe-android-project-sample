@@ -1,4 +1,3 @@
-import java.security.KeyStore
 
 apply plugin: 'com.android.application'
 
@@ -36,6 +35,18 @@ android {
             debuggable true
         }
     }
+
+    productFlavors {
+        demo {
+            applicationId "org.maxwe.android.project.sample.demo"
+            versionName "1.0-demo"
+        }
+        full {
+            applicationId "org.maxwe.android.project.sample.full"
+            versionName "1.0-full"
+        }
+    }
+
 }
 
 dependencies {
