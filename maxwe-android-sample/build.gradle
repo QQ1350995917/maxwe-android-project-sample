@@ -17,11 +17,12 @@ android {
     signingConfigs{
         release {
             storeFile file("../key.android.maxwe.org.jks")
-            //storePassword System.getenv("KSTOREPWD")
-            storePassword System.console().readLine("\nKeystore password: ")
+            storePassword System.getenv("KSTOREPWD")
+            //storePassword System.console().readLine("\nKeystore password: ")
             keyAlias "key.android.maxwe.org"
-            keyPassword System.console().readLine("\nKey password: ")
-            //keyPassword System.getenv("KEYPWD")
+            keyPassword System.getenv("KEYPWD")
+            //keyPassword System.console().readLine("\nKey password: ")
+
         }
     }
 
