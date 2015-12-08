@@ -7,6 +7,7 @@
 /build
 /captures
 build/
+gradle.properties
 
 # Maven build output.
 target/
