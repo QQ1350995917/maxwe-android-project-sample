@@ -46,3 +46,9 @@ obj/
 
 # Generate by Log
 *.log
+
+build/
+gradlew
+gradlew.bat
+.gradle/
+*/build/
