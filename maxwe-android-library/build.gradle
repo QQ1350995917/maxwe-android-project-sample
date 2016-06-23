@@ -1,0 +1,65 @@
+apply plugin: 'com.android.library'
+
+android {
+    compileSdkVersion 23
+    buildToolsVersion "23.0.3"
+
+    defaultConfig {
+        minSdkVersion 19
+        targetSdkVersion 23
+        versionCode 1
+        versionName "1.0"
+    }
+    buildTypes {
+        release {
+            minifyEnabled false
+            proguardFiles getDefaultProguardFile('proguard-android.txt'), 'proguard-rules.pro'
+        }
+    }
+
+
+    lintOptions {
+        abortOnError false
+    }
+//    useLibrary 'org.apache.http.legacy'
+}
+/**
+ * 配置模块私服地址
+ */
+repositories {
+    maven {
+        url 'https://xxx'
+    }
+}
+dependencies {
+    compile fileTree(dir: 'libs', include: ['*.jar'])
+    testCompile 'junit:junit:4.12'
+    compile 'com.android.support:appcompat-v7:23.4.0'
+}
+
+/**
+ * 使用Maven插件
+ */
+apply plugin: 'maven'
+/**
+ * 定义构件坐标属性
+ */
+group 'org.maxwe.android.project'
+def artifactId = "library"
+version '1.0.0'
+/**
+ * 定义仓库地址以及上传
+ * 使用命令gradle upload
+ */
+uploadArchives {
+    repositories {
+        mavenDeployer {
+            repository(url: "http://192.168.10.8:8081/nexus/content/repositories/retech") {
+                authentication(userName: System.getenv("MYNEXUSUSERNAME"), password: System.getenv("MYNEXUSPASSWORD"))
+            }
+            pom.version = "$project.version"
+            pom.artifactId = "$artifactId"
+            pom.groupId = "$project.group"
+        }
+    }
+}

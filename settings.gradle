@@ -1,2 +1,2 @@
-include ':maxwe-android-sample'
+include ':maxwe-android-sample', ':maxwe-android-library'
 

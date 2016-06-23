@@ -1,7 +1,7 @@
 apply plugin: 'com.android.application'
 
 def releaseTime() {
-    return new Date().format("yyyy-MM-dd", TimeZone.getTimeZone("UTC"))
+    return new Date().format("yyyyMMddHHmmss", TimeZone.getTimeZone("GMT+8"))
 }
 
 android {
@@ -13,42 +13,49 @@ android {
         minSdkVersion 19
         targetSdkVersion 23
         versionCode 1
-        versionName "1.0"
+        versionName "V1.0.0"
     }
 
     signingConfigs{
         release {
-            storeFile file("../key.android.maxwe.org.jks")
+            storeFile file("../retechcorp-android-signature.jks")
             storePassword System.getenv("KSTOREPWD")
-            //storePassword System.console().readLine("\nKeystore password: ")
-            keyAlias "key.android.maxwe.org"
+            keyAlias System.getenv("KEYALIAS")
             keyPassword System.getenv("KEYPWD")
-            //keyPassword System.console().readLine("\nKey password: ")
+        }
 
+        debug{
+            //storeFile file("../retechcorp-android-signature.jks")
+            //storePassword System.console().readLine("\nKeystore password: ")
+            //keyPassword System.console().readLine("\nKey password: ")
+            //keyPassword System.console().readLine("\nKEYALIAS password: ")
         }
     }
 
-
     buildTypes {
         release {
-//            signingConfig signingConfigs.release
+            signingConfig signingConfigs.release
             minifyEnabled true
             debuggable false
+            shrinkResources true
             proguardFiles getDefaultProguardFile('proguard-android.txt'), 'proguard-rules.pro'
         }
+
         debug{
-            minifyEnabled false
-            debuggable true
+            signingConfig signingConfigs.debug
+            minifyEnabled true
+            debuggable false
         }
     }
 
     productFlavors {
-        demo {
-            applicationId "org.maxwe.android.project.sample.demo"
+        local {
+            applicationId "org.maxwe.android.project.sample.local"
             versionName "1.0-demo"
         }
-        full {
-            applicationId "org.maxwe.android.project.sample.full"
+
+        defaul {
+            applicationId "org.maxwe.android.project.sample.defaul"
             versionName "1.0-full"
         }
     }
@@ -58,7 +65,7 @@ android {
             def outputFile = output.outputFile
             if (outputFile != null && outputFile.name.endsWith('.apk')) {
                 //这里修改apk文件名
-                def fileName = "demo_${variant.productFlavors[0].name}-${defaultConfig.versionCode}-${defaultConfig.versionName}-${releaseTime()}.apk"
+                def fileName = "${variant.productFlavors[0].name}-${defaultConfig.versionName}-${releaseTime()}.apk"
                 output.outputFile = new File(outputFile.parent, fileName)
             }
         }
@@ -69,14 +76,22 @@ android {
         targetCompatibility JavaVersion.VERSION_1_7
     }
 
-
     packagingOptions {
         exclude 'META-INF/NOTICE'
         exclude 'META-INF/LICENSE'
+        exclude 'AndroidManifest.xml'
+        exclude 'res/drawable/ic_launcher.png'
+
     }
 
     lintOptions {
         abortOnError false
+        ignoreWarnings true
+    }
+
+    dexOptions {
+        incremental true
+        javaMaxHeapSize "4g"
     }
 
     sourceSets.main.jniLibs.srcDirs = ['libs']
