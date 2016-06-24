@@ -44,22 +44,68 @@ apply plugin: 'maven'
 /**
  * 定义构件坐标属性
  */
-group 'org.maxwe.android.project'
+def groupId = 'org.maxwe.android.project'
 def artifactId = "library"
-version '1.0.0'
+def snapshot = '-SNAPSHOT'
+def version = '1.0.0' + snapshot
+
+def keyDir = 'dir'
+def valueDirAll = 'all'
+def valueDirLocal = 'local'
+def valueDirRetech = 'retech'
+
+def dir = valueDirLocal;
+def publishToMavenLocal = 'file:///Users/dingpengwei/.m2/repository'
+def publishToRetechSnapshot = 'http://192.168.10.8:8081/nexus/content/repositories/snapshots'
+def publishToRetechRelease = 'http://192.168.10.8:8081/nexus/content/repositories/releases'
 /**
  * 定义仓库地址以及上传
  * 使用命令gradle upload
+ * gradle clean build upload -Pdir=all
+ * gradle clean build upload -Pdir=local
+ * gradle clean build upload -Pdir=retech
  */
 uploadArchives {
     repositories {
         mavenDeployer {
-            repository(url: "http://192.168.10.8:8081/nexus/content/repositories/retech") {
-                authentication(userName: System.getenv("MYNEXUSUSERNAME"), password: System.getenv("MYNEXUSPASSWORD"))
+            if (project.hasProperty(keyDir)) {
+                dir = getProperty(keyDir)
             }
-            pom.version = "$project.version"
+            if (valueDirAll.equalsIgnoreCase(dir)) {
+                repository(url: publishToMavenLocal)
+                repository(url: publishToRetechSnapshot) {
+                    authentication(userName: System.getenv("MYNEXUSUSERNAME"), password: System.getenv("MYNEXUSPASSWORD"))
+                }
+            } else if (valueDirRetech.equalsIgnoreCase(dir)) {
+                if ("$version".endsWith(snapshot)) {
+                    repository(url: publishToRetechSnapshot) {
+                        authentication(userName: System.getenv("MYNEXUSUSERNAME"), password: System.getenv("MYNEXUSPASSWORD"))
+                    }
+                } else {
+                    repository(url: publishToRetechRelease) {
+                        authentication(userName: System.getenv("MYNEXUSUSERNAME"), password: System.getenv("MYNEXUSPASSWORD"))
+                    }
+                }
+            } else {
+                repository(url: publishToMavenLocal)
+            }
+            pom.version = "$version"
             pom.artifactId = "$artifactId"
-            pom.groupId = "$project.group"
+            pom.groupId = "$groupId"
         }
     }
 }
+
+task publishToAll << {
+    publishToLocal.execute()
+    publishToRetech.execute()
+}
+
+task publishToLocal << {
+    println "publishToLocal"
+}
+
+task publishToRetech << {
+    println "publishToRetech"
+}
+

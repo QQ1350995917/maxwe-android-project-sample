@@ -1,7 +1,7 @@
 apply plugin: 'com.android.application'
 
 def releaseTime() {
-    return new Date().format("yyyyMMddHHmmss", TimeZone.getTimeZone("GMT+8"))
+    return new Date().format("yyyyMMddHHmm", TimeZone.getTimeZone("GMT+8"))
 }
 
 android {
@@ -14,21 +14,30 @@ android {
         targetSdkVersion 23
         versionCode 1
         versionName "V1.0.0"
+        // dex突破65535的限制
+        multiDexEnabled true
     }
 
     signingConfigs{
         release {
-            storeFile file("../retechcorp-android-signature.jks")
-            storePassword System.getenv("KSTOREPWD")
-            keyAlias System.getenv("KEYALIAS")
-            keyPassword System.getenv("KEYPWD")
+            storeFile file("../maxwe-android-project-sample.jks")
+            //storePassword System.getenv("KSTOREPWD")
+            //keyAlias System.getenv("KEYALIAS")
+            //keyPassword System.getenv("KEYPWD")
+            storePassword "maxwe-android-project-sample"
+            keyAlias "maxwe-android-project-sample"
+            keyPassword "maxwe-android-project-sample"
+
         }
 
         debug{
-            //storeFile file("../retechcorp-android-signature.jks")
+            storeFile file("../maxwe-android-project-sample.jks")
             //storePassword System.console().readLine("\nKeystore password: ")
             //keyPassword System.console().readLine("\nKey password: ")
             //keyPassword System.console().readLine("\nKEYALIAS password: ")
+            storePassword "maxwe-android-project-sample"
+            keyAlias "maxwe-android-project-sample"
+            keyPassword "maxwe-android-project-sample"
         }
     }
 
@@ -44,19 +53,19 @@ android {
         debug{
             signingConfig signingConfigs.debug
             minifyEnabled true
-            debuggable false
+            debuggable true
         }
     }
 
     productFlavors {
         local {
             applicationId "org.maxwe.android.project.sample.local"
-            versionName "1.0-demo"
+            versionName "1.0.0"
         }
 
         defaul {
             applicationId "org.maxwe.android.project.sample.defaul"
-            versionName "1.0-full"
+            versionName "1.0.0"
         }
     }
 
@@ -65,7 +74,7 @@ android {
             def outputFile = output.outputFile
             if (outputFile != null && outputFile.name.endsWith('.apk')) {
                 //这里修改apk文件名
-                def fileName = "${variant.productFlavors[0].name}-${defaultConfig.versionName}-${releaseTime()}.apk"
+                def fileName = "${variant.productFlavors[0].name}-${defaultConfig.versionName}}.apk"
                 output.outputFile = new File(outputFile.parent, fileName)
             }
         }
@@ -103,4 +112,8 @@ dependencies {
     testCompile 'junit:junit:4.12'
     compile 'com.android.support:appcompat-v7:23.1.1'
     compile 'com.android.support:design:23.1.1'
+//    compile ('org.maxwe.android.project:library:1.0.0') {
+//        transitive = true
+//        exclude group: 'com.android.support', module: 'appcompat-v7'
+//    }
 }
