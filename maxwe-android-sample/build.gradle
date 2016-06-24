@@ -1,7 +1,7 @@
 apply plugin: 'com.android.application'
 
 def releaseTime() {
-    return new Date().format("yyyyMMddHHmm", TimeZone.getTimeZone("GMT+8"))
+    return new Date().format("yyyyMMddHHmmss", TimeZone.getTimeZone("GMT+8"))
 }
 
 android {
@@ -14,8 +14,9 @@ android {
         targetSdkVersion 23
         versionCode 1
         versionName "V1.0.0"
-        // dex突破65535的限制
+        //dex65535的限制
         multiDexEnabled true
+
     }
 
     signingConfigs{
@@ -27,6 +28,7 @@ android {
             storePassword "maxwe-android-project-sample"
             keyAlias "maxwe-android-project-sample"
             keyPassword "maxwe-android-project-sample"
+
 
         }
 
@@ -46,6 +48,7 @@ android {
             signingConfig signingConfigs.release
             minifyEnabled true
             debuggable false
+            zipAlignEnabled true
             shrinkResources true
             proguardFiles getDefaultProguardFile('proguard-android.txt'), 'proguard-rules.pro'
         }
@@ -74,7 +77,7 @@ android {
             def outputFile = output.outputFile
             if (outputFile != null && outputFile.name.endsWith('.apk')) {
                 //这里修改apk文件名
-                def fileName = "${variant.productFlavors[0].name}-${defaultConfig.versionName}}.apk"
+                def fileName = "${variant.productFlavors[0].name}-${defaultConfig.versionName}-${releaseTime()}.apk"
                 output.outputFile = new File(outputFile.parent, fileName)
             }
         }
